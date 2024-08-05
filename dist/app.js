@@ -1,5 +1,5 @@
 import express from 'express';
-import { Character } from './character.js'; // Verifica la extensión del archivo
+import { Character } from './character/character.entity.js'; // Verifica la extensión del archivo
 const app = express();
 app.use(express.json()); // esto hace que solo par
 const characters = [
@@ -64,6 +64,9 @@ app.delete('/api/characters/:id', (req, res) => {
         characters.splice(characterIdx, 1);
         res.status(200).send({ message: 'Character deleted successfully' });
     }
+});
+app.use((_, res) => {
+    return res.status(404).send({ message: 'Resource not found' });
 });
 app.listen(3000, () => {
     console.log('Server running on port 3000');

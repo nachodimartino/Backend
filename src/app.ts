@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { Character } from './character.js'; // Verifica la extensión del archivo
+import { Character } from './character/character.entity.js'; // Verifica la extensión del archivo
 
 const app = express();
 app.use(express.json());// esto hace que solo par
@@ -109,7 +109,10 @@ app.put('/api/characters/:id',sanitizeCharacterInput ,(req, res) => {
     }
   })
 
-
+  app.use((_, res) => {
+    return res.status(404).send({ message: 'Resource not found' })
+  })
+  
 
 
 app.listen(3000, () => {
