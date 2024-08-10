@@ -1,51 +1,32 @@
-import { Repository } from "../shared/repository.js";
+import { Repository } from '../shared/repository.js'
 import { Character } from './character.entity.js'
+import { db } from '../shared/db/conn.js'
+import { ObjectId } from 'mongodb'
 
-const characters = [
-    new Character(
-      'Darth Vader',
-      'Sith',
-      11,
-      101,
-      22,
-      11,
-      ['Lightsaber', 'Death Star'],
-      'a02b91bc-3769-4221-beb1-d7a3aeba7dad'
-    ),
-  ]
+const characters = db.collection<Character>('characters') // <Character> con esto especifico q es una coleccion de Character entity
 
-export class CharacterRepository implements Repository<Character>{
+export class CharacterRepository implements Repository<Character> {
+  public async findAll(): Promise<Character[] | undefined> {
+    return await characters.find().toArray()
+  }
 
-    public findAll(): Character[] | undefined {
-        return characters
-      }
+  public async findOne(item: { id: string }): Promise<Character | undefined> {
+    const _id = new ObjectId(item.id)
+    return (await characters.findOne({ _id })) || undefined
+  }
 
-      public findOne(item: { id: string }): Character | undefined {
-        return characters.find((character) => character.id === item.id)
-      }    
+  public async add(item: Character): Promise<Character | undefined> {
+    item._id = (await characters.insertOne(item)).insertedId
+    return item
+  }
 
-      public add(item: Character): Character | undefined {
-        characters.push(item)
-        return item
-      }
+  public async update(id: string, item: Character): Promise<Character | undefined> {
+    const _id = new ObjectId(id)
+    return (await characters.findOneAndUpdate({ _id }, { $set: item }, { returnDocument: 'after' })) || undefined
+  }
 
-      public update(item: Character): Character | undefined {
-        const characterIdx = characters.findIndex((character) => character.id === item.id)
-    
-        if (characterIdx !== -1) {
-          characters[characterIdx] = { ...characters[characterIdx], ...item }
-        }
-        return characters[characterIdx]
-      }
-
-
-      public delete(item: { id: string }): Character | undefined {
-        const characterIdx = characters.findIndex((character) => character.id === item.id)
-    
-        if (characterIdx !== -1) {
-          const deletedCharacters = characters[characterIdx]
-          characters.splice(characterIdx, 1)
-          return deletedCharacters
-        }
-}
+  public async delete(item: { id: string }): Promise<Character | undefined> {
+    const _id = new ObjectId(item.id)
+    return (await characters.findOneAndDelete({ _id })) || undefined
+  }
 }

@@ -1,32 +1,25 @@
-import { Character } from './character.entity.js';
-const characters = [
-    new Character('Darth Vader', 'Sith', 11, 101, 22, 11, ['Lightsaber', 'Death Star'], 'a02b91bc-3769-4221-beb1-d7a3aeba7dad'),
-];
+import { db } from '../shared/db/conn.js';
+import { ObjectId } from 'mongodb';
+const characters = db.collection('characters'); // <Character> con esto especifico q es una coleccion de Character entity
 export class CharacterRepository {
-    findAll() {
-        return characters;
+    async findAll() {
+        return await characters.find().toArray();
     }
-    findOne(item) {
-        return characters.find((character) => character.id === item.id);
+    async findOne(item) {
+        const _id = new ObjectId(item.id);
+        return (await characters.findOne({ _id })) || undefined;
     }
-    add(item) {
-        characters.push(item);
+    async add(item) {
+        item._id = (await characters.insertOne(item)).insertedId;
         return item;
     }
-    update(item) {
-        const characterIdx = characters.findIndex((character) => character.id === item.id);
-        if (characterIdx !== -1) {
-            characters[characterIdx] = { ...characters[characterIdx], ...item };
-        }
-        return characters[characterIdx];
+    async update(id, item) {
+        const _id = new ObjectId(id);
+        return (await characters.findOneAndUpdate({ _id }, { $set: item }, { returnDocument: 'after' })) || undefined;
     }
-    delete(item) {
-        const characterIdx = characters.findIndex((character) => character.id === item.id);
-        if (characterIdx !== -1) {
-            const deletedCharacters = characters[characterIdx];
-            characters.splice(characterIdx, 1);
-            return deletedCharacters;
-        }
+    async delete(item) {
+        const _id = new ObjectId(item.id);
+        return (await characters.findOneAndDelete({ _id })) || undefined;
     }
 }
 //# sourceMappingURL=character.repository.js.map

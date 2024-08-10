@@ -1,7 +1,9 @@
+### obtener todos los characters
 GET http://localhost:3000/api/characters
 
-GET http://localhost:3000/api/characters/a02b91bc-3769-4221-beb1-d7a3aeba7dad
 
+### obtener un character
+GET http://localhost:3000/api/characters/66b77c408840c5d6e99bc9fd
 
 ### crear un nuevo character
 POST http://localhost:3000/api/characters
@@ -18,8 +20,7 @@ Content-Type: application/json
 }
 
 ### modificar un character (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/characters/a02b91bc-3769-4221-beb1-d7a3aeba7dad
-Content-Type: application/json
+PUT http://localhost:3000/api/characters/66b6979e00b5378d94c4e49b
 
 {
   "name": "Anakin Skywalker",
@@ -32,7 +33,7 @@ Content-Type: application/json
 }
 
 ### modificar un character (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/characters/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+PATCH http://localhost:3000/api/characters/66b6979e00b5378d94c4e49b
 Content-Type: application/json
 
 {
@@ -43,4 +44,4 @@ Content-Type: application/json
 }
 
 ### borrar un character
-DELETE http://localhost:3000/api/characters/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+DELETE http://localhost:3000/api/characters/66b698ba3c9b97904dc4e49c
