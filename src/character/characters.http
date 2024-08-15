@@ -10,7 +10,7 @@ POST http://localhost:3000/api/characters
 Content-Type: application/json
 
 {
-  "name": "Atila",
+  "name": "nacho",
   "characterClass": "warrior",
   "items": ["bow","arrow"],
   "attack": 10,
@@ -44,4 +44,4 @@ Content-Type: application/json
 }
 
 ### borrar un character
-DELETE http://localhost:3000/api/characters/66b698ba3c9b97904dc4e49c
+DELETE http://localhost:3000/api/characters/66966d2133cb317256c4e49b
